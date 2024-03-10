@@ -11,18 +11,18 @@ def randomPointGenerator(width, height):
 def nearestNodeFinder(point):
     dist = []
     for node in nodes:
-        d = ((node.locx - point[0]) ** 2 + (node.locy - point[1]) ** 2)
+        d = ((node.locationX - point[0]) ** 2 + (node.locationY - point[1]) ** 2)
         dist.append(d)
     return nodes[np.argmin(dist)]
 
 def samplePointGenerator(pt1, pt2):
-    theta = math.atan2(pt2[1] - pt1.locy, pt2[0] - pt1.locx)
-    x = int(pt1.locx + step_size * math.cos(theta))
-    y = int(pt1.locy + step_size * math.sin(theta))
+    theta = math.atan2(pt2[1] - pt1.locationY, pt2[0] - pt1.locationX)
+    x = int(pt1.locationX + step_size * math.cos(theta))
+    y = int(pt1.locationY + step_size * math.sin(theta))
     return (x,y)
 
 def collisionChecker(pt1, pt2):
-    line = np.linspace((pt1.locx, pt1.locy), pt2, num=10, dtype=int)
+    line = np.linspace((pt1.locationX, pt1.locationY), pt2, num=10, dtype=int)
     for i in line:
         if np.any(image[i[1]][i[0]])==0:
             return 0
@@ -37,25 +37,26 @@ def find_path(iterations):
             sample_point = TreeNode(sample_pt[0], sample_pt[1])
             nearest.add_child(sample_point)
             nodes.append(sample_point)
-            if np.linalg.norm(np.array(sample_pt) - np.array((goal.locx, goal.locy))) < step_size:
+            euchlidean_dist = np.linalg.norm(np.array(sample_pt) - np.array((goal.locationX, goal.locationY)))
+            if (euchlidean_dist < step_size):
                 sample_point.add_child(goal)
                 retrace(goal)
-                waypoint.insert(0, (start.locx, start.locy))   
+                waypoint.insert(0, (start.locationX, start.locationY))   
                 for i in range(len(waypoint)-1 ):
                     cv2.line(last, (int(waypoint[i][0]), int(waypoint[i][1])), (int(waypoint[i + 1][0]), int(waypoint[i + 1][1])), (0,0,255), 3)
                     cv2.imshow('RRT', last)
                     cv2.waitKey(100)
                 return nodes
-            cv2.line(img, (nearest.locx, nearest.locy), sample_pt, (0,0,255), 1)
+            cv2.line(img, (nearest.locationX, nearest.locationY), sample_pt, (0,0,255), 1)
             cv2.circle(img, sample_pt, 2, (255,0,0), -1)
             cv2.imshow("RRT", img)
             cv2.waitKey(100)
     return None
     
 def retrace(goal):
-    if goal.locx == start.locx:
+    if goal.locationX == start.locationX:
         return
-    waypoint.insert(0,(goal.locx, goal.locy))
+    waypoint.insert(0,(goal.locationX, goal.locationY))
     retrace(goal.parent)
 
 image = cv2.imread("RRTmap.jpg")
@@ -64,16 +65,16 @@ grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 last = cv2.imread("RRTmap.jpg")
 
 start = (118,144)
-goal = (314,174)
+goal = (352,108)
 step_size = 15
 iterations = 10000
 cv2.circle(img, start, 5, (0, 0, 255), -1)
 cv2.circle(img, goal, step_size, (255, 0, 0), 3)
 
 class TreeNode:
-    def __init__(self, locx, locy):
-        self.locx = locx
-        self.locy = locy
+    def __init__(self, locationX, locationY):
+        self.locationX = locationX
+        self.locationY = locationY
         self.children = []
         self.parent = None
 
