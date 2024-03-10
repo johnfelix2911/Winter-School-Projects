@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = cv2.imread("map_final.jpg")
+img = cv2.imread("BFSandA*map.jpg")
 
 x_coords = []
 y_coords = []
