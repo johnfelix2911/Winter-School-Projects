@@ -58,10 +58,10 @@ def retrace(goal):
     waypoint.insert(0,(goal.locx, goal.locy))
     retrace(goal.parent)
 
-image = cv2.imread("inverted.jpg")
-img = cv2.imread("inverted.jpg")
+image = cv2.imread("RRTmap.jpg")
+img = cv2.imread("RRTmap.jpg")
 grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-last = cv2.imread("inverted.jpg")
+last = cv2.imread("RRTmap.jpg")
 
 start = (118,144)
 goal = (314,174)
