@@ -17,8 +17,8 @@ def nearestNodeFinder(point):
 
 def samplePointGenerator(pt1, pt2):
     theta = math.atan2(pt2[1] - pt1.locationY, pt2[0] - pt1.locationX)
-    x = int(pt1.locationX + step_size * math.cos(theta))
-    y = int(pt1.locationY + step_size * math.sin(theta))
+    x = int(pt1.locationX + radius * math.cos(theta))
+    y = int(pt1.locationY + radius * math.sin(theta))
     return (x,y)
 
 def collisionChecker(pt1, pt2):
@@ -38,7 +38,7 @@ def find_path(iterations):
             nearest.add_child(sample_point)
             nodes.append(sample_point)
             euchlidean_dist = np.linalg.norm(np.array(sample_pt) - np.array((goal.locationX, goal.locationY)))
-            if (euchlidean_dist < step_size):
+            if (euchlidean_dist < radius):
                 sample_point.add_child(goal)
                 retrace(goal)
                 waypoint.insert(0, (start.locationX, start.locationY))   
@@ -59,17 +59,17 @@ def retrace(goal):
     waypoint.insert(0,(goal.locationX, goal.locationY))
     retrace(goal.parent)
 
-image = cv2.imread("RRTmap.jpg")
-img = cv2.imread("RRTmap.jpg")
+image = cv2.imread("inverted.jpg")
+img = cv2.imread("inverted.jpg")
 grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-last = cv2.imread("RRTmap.jpg")
+last = cv2.imread("inverted.jpg")
 
 start = (118,144)
 goal = (352,108)
-step_size = 15
+radius = 15
 iterations = 10000
 cv2.circle(img, start, 5, (0, 0, 255), -1)
-cv2.circle(img, goal, step_size, (255, 0, 0), 3)
+cv2.circle(img, goal, radius, (255, 0, 0), 3)
 
 class TreeNode:
     def __init__(self, locationX, locationY):
