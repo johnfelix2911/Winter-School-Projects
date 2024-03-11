@@ -28,7 +28,7 @@ def collisionChecker(pt1, pt2):
             return 0
     return 1
 
-def find_path(iterations):
+def RRT(iterations):
     for j in range(iterations):  
         random_pt = randomPointGenerator(width, height)
         nearest = nearestNodeFinder(random_pt)
@@ -89,7 +89,7 @@ width = image.shape[1]
 nodes = [start]
 waypoint = []
 
-path = find_path(iterations)
+path = RRT(iterations)
 if not path:
     print("Fail")
 else:
